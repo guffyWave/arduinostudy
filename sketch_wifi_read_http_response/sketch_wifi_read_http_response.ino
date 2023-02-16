@@ -1,36 +1,35 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial esp8266(10, 11);
+SoftwareSerial esp8266(10, 11);  // RX, TX pins for ESP8266
 #define serialCommunicationSpeed 115200
 #define DEBUG true
 
-int sampleValue = 1;
-
+//https://mocki.io/v1/b915d693-5408-497b-bb9f-5843df4d5992
+//https://run.mocky.io/v3/41755f80-3494-4b51-9dd3-fa94dbc95fd5
 void setup() {
   Serial.begin(serialCommunicationSpeed);
   esp8266.begin(serialCommunicationSpeed);
   initiateWifi();
 }
 
-void updateThinkSpeak() {
-  sampleValue = sampleValue * 2;
-  Serial.print(" sampleValue = ");
-  Serial.println(sampleValue);
+void getJSONData() {
+  Serial.println("-----start------");
 
-  Serial.println("-----------");
-  sendData("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80\r\n", 1000, DEBUG);
+
+
+  sendData("AT+CIPSTART=\"TCP\",\"run.mocky.io\",80\r\n", 1000, DEBUG);
   delay(2000);
-  String cmdlen;
-  String sampleValueStr = String(sampleValue);
-  String cmd = "GET https://api.thingspeak.com/update?api_key=AFJURGU9A3L54WV0&field1=" + sampleValueStr + "\r\n";
-  cmdlen = cmd.length();
 
-  sendData("AT+CIPSEND=" + cmdlen + "\r\n", 2000, DEBUG);
-  esp8266.println(cmd);
+  String request = "GET https://run.mocky.io/v3/41755f80-3494-4b51-9dd3-fa94dbc95fd5\r\n";
+  String requestLengthStr = String(request.length());
 
-  Serial.print("");
+  sendData("AT+CIPSEND=" + requestLengthStr + "\r\n", 2000, DEBUG);
+  esp8266.println(request);
+
+  sendData("AT+CIPRXGET=4,0\r\n", 2000, DEBUG);  // read the HTTP response
+
   sendData("AT+CIPCLOSE\r\n", 2000, DEBUG);
-  Serial.print("");
+  Serial.println("-----end--------");
   delay(10000);
 }
 
@@ -49,7 +48,7 @@ void loop() {
   //   //Serial.println(esp8266.read());
   // }
 
-  updateThinkSpeak();
+  getJSONData();
 }
 
 void initiateWifi() {
