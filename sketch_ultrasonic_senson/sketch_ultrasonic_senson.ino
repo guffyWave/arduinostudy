@@ -4,10 +4,16 @@
 unsigned long lastTimeUltrasonicTrigger = millis();
 unsigned long ULTRASONIC_TRIGGER_DELAY = 100;
 
+
+void echoPinInterrupt(){
+
+}
+
 void setup() {
   Serial.begin(115200);
   pinMode(ECHO_PIN, INPUT);
   pinMode(TRIGGER_PIN, OUTPUT);
+
 }
 
 void triggerUltrasonicSensor() {

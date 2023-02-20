@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial esp8266(10, 11);
+SoftwareSerial esp8266(10, 11); //Rx , Tx 
 #define serialCommunicationSpeed 115200
 #define DEBUG true
 

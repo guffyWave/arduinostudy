@@ -20,11 +20,11 @@ void getJSONData() {
   sendData("AT+CIPSTART=\"TCP\",\"run.mocky.io\",80\r\n", 1000, DEBUG);
   delay(2000);
 
-  String request = "GET https://run.mocky.io/v3/41755f80-3494-4b51-9dd3-fa94dbc95fd5\r\n";
+  String request = "GET https://run.mocky.io/v3/41755f80-3494-4b51-9dd3-fa94dbc95fd5 \r\n";
   String requestLengthStr = String(request.length());
 
   sendData("AT+CIPSEND=" + requestLengthStr + "\r\n", 2000, DEBUG);
-  esp8266.println(request);
+  sendData(request,2000,DEBUG);
 
   sendData("AT+CIPRXGET=4,0\r\n", 2000, DEBUG);  // read the HTTP response
 
